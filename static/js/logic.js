@@ -18,22 +18,42 @@ function createFeatures(earthquakeData) {
     layer.bindPopup("<h3>" + feature.properties.place +
       "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
   };
-var eqMarker = [];
-  for (var i = 0; i < earthquakeData.length; i++) {
-    eqMarker.push(
-      L.circle(earthquakeData[i].geometry.coordinates, {
-        stroke: false,
-        fillOpacity: 0.75,
-        color: "white",
-        fillColor: "white",
-        radius: markerSize(earthquakeData[i].geometry.coordinates[2])
-      })
-    );
-  };
+// var eqMarker = [];
+//   for (var i = 0; i < earthquakeData.length; i++) {
+//     eqMarker.push(
+//       L.circle(earthquakeData[i].geometry.coordinates, {
+//         stroke: false,                                          -------------------------------Replace lines 21-32 with 47, ex 17-2-EC-NYC-43-50
+//         fillOpacity: 0.75,
+//         color: "white",
+//         fillColor: "white",
+//         radius: markerSize(earthquakeData[i].geometry.coordinates[2])   //Properties.Mag
+//       })
+//     );
+//   };
   // Create a GeoJSON layer containing the features array on the earthquakeData object
   // Run the onEachFeature function once for each piece of data in the array
+  // function chooseColor(eqdata) {
+  //   if (earthquakeData.geometry.coordinates[2] > 3) {
+  //     return "red"
+  //   }
+  //   else if (earthquakeData.geometry.coordinates[2] > 1.5) {
+  //     return "yellow"
+  //   }
+  //   else {
+  //     return "green"}
+  // }
   var earthquakes = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature
+    onEachFeature: onEachFeature//,
+    // style: function(feature) {
+    //   return {
+    //     color: "white",
+    //     fillColor: chooseColor(eqData),
+    //     fillOpacity: 0.5,
+    //     weight: 1.5,
+    //     radius: markerSize(earthquakeData.properties.mag)
+    //   };
+    // }                     
+    //------------------------------------------------UPDATE HERE   Define radius w/i GeoJson   Another thing in GeoJson    Point2Layer(google)
   });
   console.log(earthquakeData)
   // Sending our earthquakes layer to the createMap function
