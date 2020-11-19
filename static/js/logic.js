@@ -18,42 +18,32 @@ function createFeatures(earthquakeData) {
     layer.bindPopup("<h3>" + feature.properties.place +
       "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
   };
-// var eqMarker = [];
-//   for (var i = 0; i < earthquakeData.length; i++) {
-//     eqMarker.push(
-//       L.circle(earthquakeData[i].geometry.coordinates, {
-//         stroke: false,                                          -------------------------------Replace lines 21-32 with 47, ex 17-2-EC-NYC-43-50
-//         fillOpacity: 0.75,
-//         color: "white",
-//         fillColor: "white",
-//         radius: markerSize(earthquakeData[i].geometry.coordinates[2])   //Properties.Mag
-//       })
-//     );
-//   };
+
   // Create a GeoJSON layer containing the features array on the earthquakeData object
   // Run the onEachFeature function once for each piece of data in the array
-  // function chooseColor(eqdata) {
-  //   if (earthquakeData.geometry.coordinates[2] > 3) {
-  //     return "red"
-  //   }
-  //   else if (earthquakeData.geometry.coordinates[2] > 1.5) {
-  //     return "yellow"
-  //   }
-  //   else {
-  //     return "green"}
-  // }
+  function chooseColor(eqdata) {
+    if (eqdata.geometry.coordinates[2] > 7.5) {
+      return "red"
+    }
+    else if (eqdata.geometry.coordinates[2] > 5) {
+      return "yellow"
+    }
+    else {
+      return "green"}
+  };
+
   var earthquakes = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature//,
-    // style: function(feature) {
-    //   return {
-    //     color: "white",
-    //     fillColor: chooseColor(eqData),
-    //     fillOpacity: 0.5,
-    //     weight: 1.5,
-    //     radius: markerSize(earthquakeData.properties.mag)
-    //   };
-    // }                     
-    //------------------------------------------------UPDATE HERE   Define radius w/i GeoJson   Another thing in GeoJson    Point2Layer(google)
+    onEachFeature: onEachFeature,                  
+    pointToLayer: function (feature, latlng) {
+      var geojsonMarkerOptions = {
+        color: "white",
+        fillColor: chooseColor(feature),
+        fillOpacity: 0.5,
+        weight: 1.5,
+        radius: markerSize(feature.properties.mag * 5)
+      }
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+    }
   });
   console.log(earthquakeData)
   // Sending our earthquakes layer to the createMap function
@@ -98,6 +88,20 @@ function createMap(earthquakes) {
     layers: [streetmap, earthquakes]
   });
 
+  // Create legend
+  var legend = L.control({position: 'bottomright'});
+  legend.onAdd=function(map){
+    var div=L.DomUtil.create('div','legend');
+    var labels=["Magnitude > 7.5", "Magnitude between 5 and 7.5", "Magnitude < 5"];
+    var grades = [7.5,5,0];
+    div.innerHTML='<div><b>Legend</b></div';
+    for(var i=0; i <grades.length; i++){
+        div.innerHTML+='<i style="background:'+chooseColor(grades[i])+labels[i]+'<br/>';
+    }
+    return div;
+  }
+  legend.addTo(myMap);
+  
   // Create a layer control
   // Pass in our baseMaps and overlayMaps
   // Add the layer control to the map
