@@ -90,16 +90,17 @@ function createMap(earthquakes) {
 
   // Create legend
   var legend = L.control({position: 'bottomright'});
-  legend.onAdd=function(map){
+  legend.onAdd=function(){
     var div=L.DomUtil.create('div','legend');
     var labels=["Magnitude > 7.5", "Magnitude between 5 and 7.5", "Magnitude < 5"];
+    var colors = ["red", "yellow", "green"];
     var grades = [7.5,5,0];
-    div.innerHTML='<div><b>Legend</b></div';
+    div.innerHTML='<div><b>Legend</b></div>';
     for(var i=0; i <grades.length; i++){
-        div.innerHTML+='<i style="background:'+chooseColor(grades[i])+labels[i]+'<br/>';
+      div.innerHTML+='<i style="background:'+colors[i] +"'></i> " + grades[i]+ labels[i]+ (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
     }
     return div;
-  }
+  };
   legend.addTo(myMap);
   
   // Create a layer control
