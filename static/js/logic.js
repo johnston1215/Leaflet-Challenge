@@ -92,13 +92,21 @@ function createMap(earthquakes) {
   var legend = L.control({position: 'bottomright'});
   legend.onAdd=function(){
     var div=L.DomUtil.create('div','legend');
-    var labels=["Magnitude > 7.5", "Magnitude between 5 and 7.5", "Magnitude < 5"];
-    var colors = ["red", "yellow", "green"];
-    var grades = [7.5,5,0];
-    div.innerHTML='<div><b>Legend</b></div>';
-    for(var i=0; i <grades.length; i++){
-      div.innerHTML+='<i style="background:'+colors[i] +"'></i> " + grades[i]+ labels[i]+ (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
-    }
+    // var labels=["Magnitude > 7.5", "Magnitude between 5 and 7.5", "Magnitude < 5"];
+    // var colors = ["red", "yellow", "green"];
+    // var grades = [7.5,5,0];
+    div.innerHTML=`<div><b>Legend</b><br>
+    Magnitude &gt; 7.5
+    <i style="background: red">&nbsp;&nbsp;&nbsp;</i> <br>
+    Magnitude bw 5 AND 7.5
+    <i style="background: yellow">&nbsp;&nbsp;&nbsp;</i> <br>
+    Magnitude &lt; 5
+    <i style="background: green">&nbsp;&nbsp;&nbsp;</i></div>`;
+    // var blah = "";
+    // for(var i=0; i <grades.length; i++){
+    //   blah+='<i style="background:'+colors[i] +"'></i> " + grades[i]+ labels[i]+ (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
+    // console.log(blah)
+    // }
     return div;
   };
   legend.addTo(myMap);
